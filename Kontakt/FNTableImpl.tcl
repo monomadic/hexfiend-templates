@@ -1,7 +1,7 @@
 # filename groups are:
-# - other
 # - sample
 # - special
+# - other
 
 proc BFileName {} {
 	section "BFileName" {
@@ -13,10 +13,10 @@ proc BFileName {} {
 			switch $segmentType {
 				1 {
 					# drive letter
-					# uint8 "?"
+					uint8 "?"
 					# uint16 "?"
-					set length [uint32 "len"]
-					utf16 [expr $length * 2] "name"
+					# set length [uint32 "len"]
+					# utf16 [expr $length * 2] "name"
 				}
 				2 {
 					set length [uint32 "len"]
@@ -58,45 +58,48 @@ proc FNTableImpl {} {
 
 	if {$version != 0x02} { error "Unsupported FNTableImpl: v$version" }
 
-	set tableCount [uint32 "tableCount"]
+	section "specialFileTable" {
+		set specialFileCount [uint32 "specialFileCount"]
 
-	section "absolutePath" {
-		BFileName
-	}
-
-	set fileCount [uint32 "fileCount"]
-
-	section "filenameTable" {
-		for { set i 0 } { $i < $fileCount } { incr i } {
-			BFileName
+		for { set i 0 } { $i < $specialFileCount } { incr i } {
+			section "specialFile" {
+				BFileName
+			}
 		}
 	}
 
-	section "filenameTable" {
-		for { set i 0 } { $i < $fileCount } { incr i } {
-			uint16 "?"
-			uint16 "?"
-			uint16 "?"
-			uint16 "?"
-		}
-	}
-
-	section "filenameTable" {
-		for { set i 0 } { $i < $fileCount } { incr i } {
-			uint16 "?"
-			uint16 "?"
-		}
-	}
-
-
-	section "resourcesTable" {
+	section "filetable" {
 		set fileCount [uint32 "fileCount"]
 		section "filenameTable" {
 			for { set i 0 } { $i < $fileCount } { incr i } {
 				BFileName
 			}
 		}
+
+		section "hashTable?" {
+			for { set i 0 } { $i < $fileCount } { incr i } {
+				uint16 "?"
+				uint16 "?"
+				uint16 "?"
+				uint16 "?"
+			}
+		}
+
+		section "offsetsTable?" {
+			for { set i 0 } { $i < $fileCount } { incr i } {
+				uint16 "?"
+				uint16 "?"
+			}
+		}
 	}
+
+
+		section "otherTable" {
+			set otherCount [uint32 "otherCount"]
+				for { set i 0 } { $i < $otherCount } { incr i } {
+					BFileName
+				}
+		}
 
 	uint16 "?"
 }
