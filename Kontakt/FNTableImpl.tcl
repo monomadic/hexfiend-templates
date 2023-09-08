@@ -9,36 +9,33 @@ proc BFileName {} {
 
 		if {$pathSegments > 0} {
 		for { set i 0 } { $i < $pathSegments } { incr i } {
-			set segmentType [uint8 "segmentType"]
-			switch $segmentType {
-				1 {
-					# drive letter
-					uint8 "?"
-					# uint16 "?"
-					# set length [uint32 "len"]
-					# utf16 [expr $length * 2] "name"
-				}
-				2 {
-					set length [uint32 "len"]
-					utf16 [expr $length * 2] "name"
-				}
-				4 {
-					set length [uint32 "len"]
-					utf16 [expr $length * 2] "name"
-				}
-				5 {
-					#uint8 "?"
-					# set length [uint32 "len"]
-					# utf16 [expr $length * 2] "name"
-				}
-
-				6 {
-					uint8 "?"
-					set length [uint32 "len"]
-					utf16 [expr $length * 2] "name"
-				}
-				default {
-					exit "unknown segmentType {$segmentType}"
+			section "segment" {
+				set segmentType [uint8 "segmentType"]
+				switch $segmentType {
+					1 {
+						sectionname "drive"
+						set length [uint32 "len"]
+						utf16 [expr $length * 2] "name"
+					}
+					2 {
+						sectionname "dir"
+						set length [uint32 "len"]
+						utf16 [expr $length * 2] "name"
+					}
+					4 {
+						sectionname "file"
+						set length [uint32 "len"]
+						utf16 [expr $length * 2] "name"
+					}
+					5 {
+						exit "?"
+					}
+					6 {
+						sectionname "specialType"
+					}
+					default {
+						exit "unknown segmentType {$segmentType}"
+					}
 				}
 			}
 		}
@@ -58,6 +55,7 @@ proc FNTableImpl {} {
 
 	if {$version != 0x02} { error "Unsupported FNTableImpl: v$version" }
 
+
 	section "specialFileTable" {
 		set specialFileCount [uint32 "specialFileCount"]
 
@@ -68,7 +66,7 @@ proc FNTableImpl {} {
 		}
 	}
 
-	section "filetable" {
+	section "sampleTable" {
 		set fileCount [uint32 "fileCount"]
 		section "filenameTable" {
 			for { set i 0 } { $i < $fileCount } { incr i } {
@@ -92,7 +90,6 @@ proc FNTableImpl {} {
 			}
 		}
 	}
-
 
 		section "otherTable" {
 			set otherCount [uint32 "otherCount"]
