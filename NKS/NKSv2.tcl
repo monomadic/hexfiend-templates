@@ -1,6 +1,7 @@
+# 160 bytes
 section "BPatchHeaderV2" {
 	set headerMagic [hex 4 "headerMagic"]
-	if {$headerMagic != 0x722A013E} {
+	if {$headerMagic != 0x722A013E && $headerMagic != 0xB36EE55E} {
 		error "NKS headerMagic must be 0x722A013E, found $headerMagic"
 	}
 
@@ -31,14 +32,15 @@ section "BPatchHeaderV2" {
 	uint8 "u8?"
 	uint32 "icon"
 
-	#bytes 104 "strings"
 	ascii 8 "author"
 	ascii 3 "?"
 	ascii 86 "url"
 	ascii 7 "?"
 
-	hex 4 "checksum?"
+	uint32	"svnRev"
 	uint32 "patchLevel?"
 }
 
+include "NKS/NKSv2Block.tcl"
+include "NKS/NKSv2Block.tcl"
 include "NKS/NKSv2Block.tcl"

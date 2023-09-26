@@ -1,3 +1,4 @@
+# 222 bytes
 section "BPatchHeaderV42" {
 	set headerMagic [hex 4 "headerMagic"]
 	if {$headerMagic != 0x1A6337EA} {
@@ -15,7 +16,7 @@ section "BPatchHeaderV42" {
 
 	unixtime32 "creationDate"
 
-	uint32 "?"
+	uint32 "creationDatePadding"
 
 	uint16 "numZones"
 	uint16 "numGroups"
@@ -23,11 +24,15 @@ section "BPatchHeaderV42" {
 	bytes 16 "?"
 	uint32 "icon"
 
-	bytes 104 "strings"
+	ascii 8 "author"
+	ascii 3 "?"
+	ascii 86 "url"
+	ascii 7 "?"
+
 	bytes 16 "md5_checksum"
 
 	uint32 "?"
-	hex 4 "checksum?"
+	uint32	"svnRev"
 	uint32 "decompressedSize"
 
 	bytes 32 "?"
