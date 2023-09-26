@@ -1,19 +1,18 @@
 hex 4 "magic 0x54AC705E"
 
 section "DirectoryHeader" {
-	set version [hex 2 "version"]
+	set version [uint16 "version"]
 	uint32 "set_id"
 	uint32 "?"
-	uint32 "entryCount"
-	uint32 "?"
+	set numItems [uint32 "numItems"]
+	uint32 "padding"
 
-	switch $version {
-		0x0100 {}
-		0x0110 {}
-		0x1101 {
-			uint16 "?"
+	for { set i 0 } { $i < $numItems } { incr i } {
+		section "BlockItem" {
+			set itemLength [uint16 "itemLength"]
 			uint32 "offset"
-			uint16 "type"
+			set referenceType [uint16 "referenceType"]
+			utf16 [expr $itemLength - 8] "content"
 		}
 	}
 }

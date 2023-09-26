@@ -5,7 +5,7 @@ section "BPatchHeaderV2" {
 		error "NKS headerMagic must be 0x722A013E, found $headerMagic"
 	}
 
-	set patchType [uint16 "patchType"]
+	uint16 "?"
 
 	uint8 "patchVersionMinorC"
 	uint8 "patchVersionMinorB"
@@ -24,23 +24,28 @@ section "BPatchHeaderV2" {
 
 	uint16 "u16?"
 	uint16 "u16?"
-
-	uint32 "patchType"
+	set patchType [uint32 "patchType"]
 	uint8 "u8?"
 	uint16 "u16?"
 	uint32 "u32?"
 	uint8 "u8?"
+
 	uint32 "icon"
 
 	ascii 8 "author"
-	ascii 3 "?"
+	uint8 "?"
+	uint16 "?"
 	ascii 86 "url"
 	ascii 7 "?"
 
 	uint32	"svnRev"
-	uint32 "patchLevel?"
+	uint32 "patchLevel"
 }
 
-include "NKS/NKSv2Block.tcl"
-include "NKS/NKSv2Block.tcl"
-include "NKS/NKSv2Block.tcl"
+if {$patchType == 1} {
+	section "resourceRoot" {
+		include "NKS/ResourceBlock.tcl"
+	}
+} else {
+	bytes eof "compressedData"
+}

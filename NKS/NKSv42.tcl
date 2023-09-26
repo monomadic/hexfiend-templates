@@ -5,7 +5,7 @@ section "BPatchHeaderV42" {
 		error "NKS headerMagic must be 0x1290A87F, found $headerMagic"
 	}
 
-	set patchType [uint16 "patchType"]
+	uint16 "?"
 
 	uint8 "patchVersionMinorC"
 	uint8 "patchVersionMinorB"
@@ -21,17 +21,28 @@ section "BPatchHeaderV42" {
 	uint16 "numZones"
 	uint16 "numGroups"
 	uint16 "numInstruments"
-	bytes 16 "?"
+
+	uint16 "u16?"
+	uint16 "u16?"
+	uint32 "patchType"
+	uint8 "u8?"
+	uint16 "u16?"
+	uint32 "u32?"
+	uint8 "u8?"
+
 	uint32 "icon"
 
 	ascii 8 "author"
-	ascii 3 "?"
+	uint8 "?"
+	uint16 "?"
 	ascii 86 "url"
 	ascii 7 "?"
 
+	# additional V42 stuff:
+
 	bytes 16 "md5_checksum"
 
-	uint32 "?"
+	uint32 "patchLevel"
 	uint32	"svnRev"
 	uint32 "decompressedSize"
 
@@ -42,8 +53,8 @@ section "BPatchHeaderV42" {
 
 bytes $zlibLength "compressedSegment"
 
-section "footer" {
-	hex 4 "footerMagic"
+section "BPatchMetaInfoHeader" {
+	hex 4 "magic"
 	uint8 ""
 	uint8 ""
 	uint16 ""
