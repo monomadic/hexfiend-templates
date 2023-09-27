@@ -1,9 +1,9 @@
 # 160 bytes
 section "BPatchHeaderV2" {
 	set headerMagic [hex 4 "headerMagic"]
-	if {$headerMagic != 0x722A013E && $headerMagic != 0xB36EE55E} {
-		error "NKS headerMagic must be 0x722A013E, found $headerMagic"
-	}
+	# if {$headerMagic != 0x1A6337EA} {
+	# 	error "NKS headerMagic must be 0x1290A87F, found $headerMagic"
+	# }
 
 	set patchType [uint16 "patchType"]
 

@@ -5,7 +5,7 @@ section "BPatchHeaderV42" {
 		error "NKS headerMagic must be 0x1290A87F, found $headerMagic"
 	}
 
-	uint16 "?"
+	set patchType [uint16 "patchType"]
 
 	uint8 "patchVersionMinorC"
 	uint8 "patchVersionMinorB"
@@ -16,7 +16,10 @@ section "BPatchHeaderV42" {
 
 	unixtime32 "creationDate"
 
-	uint32 "creationDatePadding"
+	uint8 "?"
+	uint8 "?"
+	uint8 "?"
+	uint8 "?"
 
 	uint16 "numZones"
 	uint16 "numGroups"
@@ -24,9 +27,13 @@ section "BPatchHeaderV42" {
 
 	uint16 "u16?"
 	uint16 "u16?"
-	uint32 "patchType"
+
+	set isMonolith [uint32 "isMonolith"]
+
 	uint8 "u8?"
-	uint16 "u16?"
+	uint8 "u8?"
+	uint8 "u8?"
+
 	uint32 "u32?"
 	uint8 "u8?"
 

@@ -1,9 +1,9 @@
-# 160 bytes
-section "BPatchHeaderV2" {
+# 222 bytes
+section "BPatchHeaderV42" {
 	set headerMagic [hex 4 "headerMagic"]
-	if {$headerMagic != 0x722A013E && $headerMagic != 0xB36EE55E} {
-		error "NKS headerMagic must be 0x722A013E, found $headerMagic"
-	}
+	# if {$headerMagic != 0x1A6337EA} {
+	# 	error "NKS headerMagic must be 0x1290A87F, found $headerMagic"
+	# }
 
 	set patchType [uint16 "patchType"]
 
@@ -27,6 +27,7 @@ section "BPatchHeaderV2" {
 
 	uint16 "u16?"
 	uint16 "u16?"
+
 	set isMonolith [uint32 "isMonolith"]
 
 	uint8 "u8?"
@@ -44,14 +45,26 @@ section "BPatchHeaderV2" {
 	ascii 86 "url"
 	ascii 7 "?"
 
-	uint32	"svnRev"
+	# additional V42 stuff:
+
+	bytes 16 "md5_checksum"
+
 	uint32 "patchLevel"
+	uint32	"svnRev"
+	uint32 "decompressedSize"
+
+	bytes 32 "?"
+
+	#set numStrings [uint32 "numStrings"]
 }
 
-if {$isMonolith == 1} {
-	section "resourceRoot" {
-		include "NKS/ResourceBlock.tcl"
-	}
-} else {
-	bytes eof "compressedData"
+bytes $zlibLength "compressedSegment"
+
+section "BPatchMetaInfoHeader" {
+	hex 4 "magic"
+	uint8 ""
+	uint8 ""
+	uint16 ""
+	set length [uint32 "length"]
+	bytes $length "soundInfoItem"
 }
