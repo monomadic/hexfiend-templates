@@ -28,8 +28,8 @@ switch $magic {
 		}
 
 		if {$headerVersion > 0x10F} {
-			# include "NKS/BPatchHeaderV42.tcl"
-			# bytes eof "zlibCompressedData"
+			include "NKS/BPatchHeaderV42.tcl"
+			bytes eof "zlibCompressedData"
 		}
 	}
 }

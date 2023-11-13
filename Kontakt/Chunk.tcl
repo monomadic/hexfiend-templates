@@ -7,7 +7,6 @@ proc chunk {} {
 
 		switch $id {
 			0x28 {
-				#bytes $length "data"
 				object $length
 			}
 			default {

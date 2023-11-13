@@ -25,8 +25,7 @@ section "BPatchHeaderV42" {
 	uint16 "numGroups"
 	uint16 "numInstruments"
 
-	uint16 "u16?"
-	uint16 "u16?"
+	uint32 "pcmDataLen"
 
 	set isMonolith [uint32 "isMonolith"]
 
