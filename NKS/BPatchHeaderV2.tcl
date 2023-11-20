@@ -16,36 +16,34 @@ section "BPatchHeaderV2" {
 
 	unixtime32 "creationDate"
 
-	uint8 "?"
-	uint8 "?"
-	uint8 "?"
-	uint8 "?"
+	uint32 "u_a"
 
 	uint16 "numZones"
 	uint16 "numGroups"
 	uint16 "numInstruments"
 
-	uint16 "u16?"
-	uint16 "u16?"
+	uint32 "pcmDataLen"
 	set isMonolith [uint32 "isMonolith"]
 
-	uint8 "u8?"
-	uint8 "u8?"
-	uint8 "u8?"
+	uint8 "supportVersionMinorC"
+	uint8 "supportVersionMinorB"
+	uint8 "supportVersionMinorA"
+	uint8 "supportVersionMajor"
 
-	uint32 "u32?"
-	uint8 "u8?"
+	uint32 "u_c"
 
-	uint32 "icon"
+	uint32 "catIconIdx"
+	ascii 8 "instrumentAuthor"
+	uint8 "instrumentCat1"
+	uint8 "instrumentCat1"
+	uint8 "instrumentCat1"
+	ascii 85 "instrumentURL"
 
-	ascii 8 "author"
-	uint8 "?"
-	uint16 "?"
-	ascii 86 "url"
-	ascii 7 "?"
+	uint32 "u_b"
 
-	uint32	"svnRev"
 	uint32 "patchLevel"
+	uint32 "svnRev"
+	uint32 "soundInfoOffset"
 }
 
 if {$isMonolith == 1} {

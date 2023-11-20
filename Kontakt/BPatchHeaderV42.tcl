@@ -15,7 +15,7 @@ ascii 4 "appSignature"
 
 unixtime32 "creationDate"
 
-uint32 "u_a_u32?"
+uint32 "u_a"
 
 uint16 "numZones"
 uint16 "numGroups"
@@ -32,24 +32,24 @@ section "minVersion" {
 	uint8 "major"
 }
 
-uint32 "decompressedLen?"
+uint32 "u_c"
 
-uint32 "icon"
+uint32 "catIconIdx"
+ascii 8 "instrumentAuthor"
+uint8 "instrumentCat1"
+uint8 "instrumentCat1"
+uint8 "instrumentCat1"
+ascii 85 "instrumentURL"
 
-ascii 8 "author"
-uint8 "?"
-uint16 "?"
-ascii 86 "url"
-ascii 7 "?"
+uint32 "u_b"
 
 # additional V42 stuff:
 
+uint32 "flags"
 bytes 16 "md5_checksum"
 
+uint32 "patchLevel"
 uint32 "svnRev"
-uint32	"crc32_fast"
+
 uint32 "decompressedSize"
-
 bytes 32 "?"
-
-#set numStrings [uint32 "numStrings"]
