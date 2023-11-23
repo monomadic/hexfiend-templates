@@ -1,56 +1,53 @@
-# sampleFileName
-# sampleTimeStamp
-# sampleContainerOfs
-
-# 20 bytes
-proc BFileName {} {
-	set numSegments [uint8 "numSegments"]
-	BFileNameSegment
-
-	# for { set i 0 } { $i < $numSegments } { incr i } {
-	# 	BFileNameSegment
-	# }
-}
-
 proc BFileNameSegment {} {
-		set segmentType [uint8 "segmentType"]
-		set length [uint32 "strlen"]
-		if { $length > 0 } {
-			utf16 [expr $length * 2] "pathSegment"
-		}
-}
-
-proc FileName {} {
-	section "FileName" {
-		set segmentCount [uint8 "segmentCount?"]
-
-		for { set i 0 } { $i < $segmentCount + 1 } { incr i } {
 			section "fileSegment" {
 				set segmentType [uint8 "segmentType"]
 
 				switch $segmentType {
-					0 {
-						uint8 "?"
-						uint8 "?"
+					1 {
+						sectionname "drive"
+						set length [uint32 "len"]
+						utf16 [expr $length * 2] "name"
 					}
 					2 {
-						set length [uint32 "strlen"]
-						if { $length > 0 } {
-							utf16 [expr $length * 2] "pathSegment"
-						}
+						sectionname "dir"
+						set length [uint32 "len"]
+						utf16 [expr $length * 2] "name"
+					}
+					3 {
+						sectionname ".."
 					}
 					4 {
-						set length [uint32 "strlen"]
-						utf16 [expr $length * 2] "pathSegment"
-						uint8 "?"
-						uint8 "?"
-						uint16 "?"
-						uint32 "?"
-						uint8 "?"
-						uint8 "?"
+						sectionname "file"
+						set length [uint32 "len"]
+						utf16 [expr $length * 2] "name"
+					}
+					5 {
+						set length [uint32 "len"]
+						utf16 [expr $length * 2] "name"
+					}
+					6 {
+						sectionname "special"
+						# set length [uint32 "len"]
+						# utf16 [expr $length * 2] "name"
+					}
+					8 {
+						sectionname "resource?"
+						set length [uint32 "len"]
+						utf16 [expr $length * 2] "name"
+					}
+
+					default {
+						exit "unknown segmentType $segmentType"
 					}
 				}
 			}
+}
+
+proc FileName {} {
+	section "FileName" {
+		set segmentCount [uint32 "segmentCount"]
+		for { set i 0 } { $i < $segmentCount } { incr i } {
+			BFileNameSegment
 		}
 	}
 }
@@ -62,11 +59,44 @@ proc FNTablePreK51 {} {
 	}
 
 	set length [uint32 "length"]
+	set specialFileCount [uint32 "specialFileCount"]
 
-	set u [uint32 "version?"]
-	set fileCount [uint32 "fileCount"]
+	if {$specialFileCount > 0} {
+		section "specialFilenameList" {
+			for { set i 0 } { $i < $specialFileCount } { incr i } {
+				FileName
+			}
+		}
+	}
 
-	FileName
+	set sampleFileCount [uint32 "sampleFileCount"]
+	if {$sampleFileCount > 0} {
+		section "sampleFilenameList" {
+			for { set i 0 } { $i < $sampleFileCount } { incr i } {
+				FileName
+			}
+		}
+
+		section "sampleTimestampTable" {
+			for { set i 0 } { $i < $sampleFileCount } { incr i } {
+				unixtime32 "creationDate"
+				uint32 "?"
+			}
+		}
+	}
+
+	set otherFileCount [uint32 "otherFileCount"]
+	if {$otherFileCount > 0} {
+		section "otherFileCountList" {
+			for { set i 0 } { $i < $otherFileCount } { incr i } {
+				# uint32 "?"
+				# BFileNameSegment
+				# BFileNameSegment
+				# BFileNameSegment
+				FileName
+			}
+		}
+	}
 }
 
 FNTablePreK51

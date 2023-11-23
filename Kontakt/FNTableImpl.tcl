@@ -23,9 +23,9 @@ proc BFileName {} {
 						utf16 [expr $length * 2] "name"
 					}
 					3 {
-						sectionname "?"
-						set length [uint32 "len"]
-						utf16 [expr $length * 2] "name"
+						sectionname ".."
+						# set length [uint32 "len"]
+						# utf16 [expr $length * 2] "name"
 					}
 					4 {
 						sectionname "file"
@@ -42,7 +42,7 @@ proc BFileName {} {
 						# utf16 [expr $length * 2] "name"
 					}
 					default {
-						exit "unknown segmentType {$segmentType}"
+						exit "unknown segmentType $segmentType"
 					}
 				}
 			}
@@ -57,12 +57,10 @@ proc FNTableImpl {} {
 	if {$id != 0x4b} {
 		error "FNTableImpl must have id 0x4b, found $id"
 	}
-
 	set length [uint32 "length"]
+
 	set version [uint16 -hex "version"]
-
 	if {$version != 0x02} { error "Unsupported FNTableImpl: v$version" }
-
 
 	section "specialFileTable" {
 		set specialFileCount [uint32 "specialFileCount"]
@@ -76,18 +74,17 @@ proc FNTableImpl {} {
 
 	section "sampleTable" {
 		set fileCount [uint32 "fileCount"]
-		section "filenameTable" {
+
+		section "sampleFilenameTable" {
 			for { set i 0 } { $i < $fileCount } { incr i } {
 				BFileName
 			}
 		}
 
-		section "hashTable?" {
+		section "sampleTimestampTable" {
 			for { set i 0 } { $i < $fileCount } { incr i } {
-				uint16 "?"
-				uint16 "?"
-				uint16 "?"
-				uint16 "?"
+				unixtime32 "creationDate"
+				uint32 "?"
 			}
 		}
 

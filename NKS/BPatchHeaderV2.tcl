@@ -16,13 +16,14 @@ section "BPatchHeaderV2" {
 
 	unixtime32 "creationDate"
 
-	uint32 "u_a"
+	int16 "u_aa"
+	int16 "u_ab"
 
 	uint16 "numZones"
 	uint16 "numGroups"
 	uint16 "numInstruments"
 
-	uint32 "pcmDataLen"
+	uint32 "numBytesSamplesTotal"
 	set isMonolith [uint32 "isMonolith"]
 
 	uint8 "supportVersionMinorC"
